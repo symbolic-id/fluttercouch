@@ -2,7 +2,7 @@ import 'from.dart';
 import 'query.dart';
 
 class Select extends Query {
-  From from(String databaseName, {String as}) {
+  From from(String databaseName, {String? as}) {
     var resultQuery = new From();
     resultQuery.internalOptions = this.options;
     if (as != null) {

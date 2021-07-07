@@ -42,7 +42,7 @@ abstract class Expression {
     return MetaExpression({"not": expression.internalExpressionStack});
   }
 
-  final List<Map<String, dynamic>> internalExpressionStack = new List();
+  final List<Map<String, dynamic>> internalExpressionStack = [];
 
   List<Map<String, dynamic>> get expressionStack =>
       List.from(internalExpressionStack);
@@ -144,7 +144,7 @@ abstract class Expression {
   }
 
   Expression _addExpression(String selector, Expression expression,
-      {String secondSelector, Expression secondExpression}) {
+      {String? secondSelector, Expression? secondExpression}) {
     Expression clone = this.clone();
     if (secondSelector != null && secondExpression != null) {
       clone.internalExpressionStack.add({

@@ -7,7 +7,7 @@ import 'where.dart';
 import 'expression/expression.dart';
 
 class Joins extends Query {
-  Limit limit(Expression expression, {Expression offset}) {
+  Limit limit(Expression expression, {Expression? offset}) {
     var resultQuery = new Limit();
     resultQuery.internalOptions = this.options;
     if (offset != null) {

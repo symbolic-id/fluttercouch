@@ -39,20 +39,20 @@ abstract class Fluttercouch {
 
   Stream _replicationStream = _replicationEventChannel.receiveBroadcastStream();
 
-  Future<String> initDatabaseWithName(String _name) =>
+  Future<String?> initDatabaseWithName(String _name) =>
       _methodChannel.invokeMethod('initDatabaseWithName', _name);
 
-  Future<String> saveDocument(Document _doc) =>
+  Future<String?> saveDocument(Document _doc) =>
       _methodChannel.invokeMethod('saveDocument', _doc.toMap());
 
-  Future<String> saveDocumentWithId(String _id, Document _doc) =>
+  Future<String?> saveDocumentWithId(String _id, Document _doc) =>
       _methodChannel.invokeMethod('saveDocumentWithId',
           <String, dynamic>{'id': _id, 'map': _doc.toMap()});
 
   Future<Document> getDocumentWithId(String _id) async {
-    Map<dynamic, dynamic> _docResult;
+    Map<dynamic, dynamic>? _docResult;
     _docResult = await _methodChannel.invokeMethod('getDocumentWithId', _id);
-    return Document(_docResult["doc"], _docResult["id"]);
+    return Document(_docResult!["doc"], _docResult["id"]);
   }
 
   Future<Null> setReplicatorEndpoint(String _endpoint) =>
@@ -84,19 +84,19 @@ abstract class Fluttercouch {
   Future<Null> stopReplicator() =>
       _methodChannel.invokeMethod('stopReplicator');
 
-  Future<String> closeDatabaseWithName(String _name) =>
+  Future<String?> closeDatabaseWithName(String _name) =>
       _methodChannel.invokeMethod('closeDatabaseWithName', _name);
 
-  Future<String> closeDatabase() =>
+  Future<String?> closeDatabase() =>
       _methodChannel.invokeMethod('closeDatabase');
 
   Future<Null> deleteDatabaseWithName(String _name) =>
       _methodChannel.invokeMethod('deleteDatabaseWithName', _name);
 
-  Future<int> getDocumentCount() =>
+  Future<int?> getDocumentCount() =>
       _methodChannel.invokeMethod('getDocumentCount');
 
   StreamSubscription listenReplicationEvents(Function(String) function) {
-    return _replicationStream.listen(function);
+    return _replicationStream.listen(function as void Function(dynamic)?);
   }
 }

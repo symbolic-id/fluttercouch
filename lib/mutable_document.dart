@@ -1,12 +1,12 @@
 import 'document.dart';
 
 class MutableDocument extends Document {
-  MutableDocument([Map<dynamic, dynamic> data, String id]) : super(data, id) {
+  MutableDocument([Map<dynamic, dynamic>? data, String? id]) : super(data, id) {
     this.id = id;
   }
 
   @override
-  String id;
+  String? id;
 
   /// Set a value for the given key. Allowed value types are Array, Map,
   /// Number types, null, String, Array Object, Map and nil.
@@ -19,7 +19,7 @@ class MutableDocument extends Document {
   /// - Returns: The self object.
   MutableDocument setValue(String key, Object value) {
     if (value != null) {
-      super.internalState[key] = value;
+      super.internalState![key] = value;
     }
 
     return this;
@@ -91,7 +91,7 @@ class MutableDocument extends Document {
   ///
   /// - Parameter key: The key.
   MutableDocument remove(String key) {
-    super.internalState.remove(key);
+    super.internalState!.remove(key);
 
     return this;
   }
@@ -110,7 +110,7 @@ class MutableDocument extends Document {
   /// - Parameter key: The key.
   /// - Returns: The List Object object or null.
   @override
-  List<T> getList<T>(String key) {
+  List<T>? getList<T>(String key) {
     var _result = getValue(key);
     if (_result is List) {
       return List.castFrom<dynamic, T>(_result);
@@ -126,7 +126,7 @@ class MutableDocument extends Document {
   /// - Parameter key: The key.
   /// - Returns: The Map Object object or nil.
   @override
-  Map<K, V> getMap<K, V>(String key) {
+  Map<K, V>? getMap<K, V>(String key) {
     var _result = getValue(key);
     if (_result is Map) {
       return Map.castFrom<dynamic, dynamic, K, V>(_result);

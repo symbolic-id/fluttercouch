@@ -6,7 +6,7 @@ import 'ordering.dart';
 import 'expression/expression.dart';
 
 class Having extends Query {
-  Limit limit(Expression expression, {Expression offset}) {
+  Limit limit(Expression expression, {Expression? offset}) {
     var resultQuery = new Limit();
     resultQuery.internalOptions = this.options;
     if (offset != null) {

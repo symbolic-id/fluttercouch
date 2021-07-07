@@ -2,24 +2,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fluttercouch/fluttercouch.dart';
 
 void main() {
-  Map initializer;
-  Document document;
-  MutableDocument mutableDocument;
+  Map? initializer;
+  late Document document;
+  late MutableDocument mutableDocument;
   setUp(() {
     initializer = new Map();
-    initializer['string'] = "string";
-    initializer['double'] = 3.14;
-    initializer['int'] = 12;
-    initializer['map'] = {};
-    initializer['boolInt'] = 0;
-    initializer['bool'] = true;
-    initializer['list'] = [];
+    initializer!['string'] = "string";
+    initializer!['double'] = 3.14;
+    initializer!['int'] = 12;
+    initializer!['map'] = {};
+    initializer!['boolInt'] = 0;
+    initializer!['bool'] = true;
+    initializer!['list'] = [];
     document = Document(initializer, "123456789");
     mutableDocument = MutableDocument();
   });
 
   test("Document: getting string", () {
-    expect(document.count(), initializer.length);
+    expect(document.count(), initializer!.length);
   });
   test("Document: getting string", () {
     expect(document.getString('string'), "string");
@@ -61,7 +61,7 @@ void main() {
     expect(document.getList("boolInt"), null);
   });
   test("Document: getting getKeys", () {
-    expect(document.getKeys(), initializer.keys);
+    expect(document.getKeys(), initializer!.keys);
   });
   test("Document: getting id", () {
     expect(document.id, "123456789");
@@ -88,7 +88,7 @@ void main() {
     expect(mutableDocument.getMap('map'), {"test": true});
   });
   test("mutableDocument: setting list", () {
-    mutableDocument.setArray('list', List<int>());
+    mutableDocument.setArray('list', []);
     expect(mutableDocument.getList('list'), []);
   });
   test("mutableDocument: null list", () {

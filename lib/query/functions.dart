@@ -109,7 +109,7 @@ class Functions extends Object with Expression {
     return Functions({"radians": expression.expressionStack});
   }
 
-  factory Functions.round(Expression expression, {Expression digits}) {
+  factory Functions.round(Expression expression, {Expression? digits}) {
     if (digits != null) {
       return Functions({
         "round": expression.expressionStack,
@@ -148,7 +148,7 @@ class Functions extends Object with Expression {
     return Functions({"trim": expression.expressionStack});
   }
 
-  factory Functions.trunc(Expression expression, {Expression digits}) {
+  factory Functions.trunc(Expression expression, {Expression? digits}) {
     if (digits != null) {
       return Functions({
         "trunc": expression.expressionStack,

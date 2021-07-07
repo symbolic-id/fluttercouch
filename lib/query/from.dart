@@ -31,7 +31,7 @@ class From extends Query {
     return resultQuery;
   }
 
-  Limit limit(Expression expression, {Expression offset}) {
+  Limit limit(Expression expression, {Expression? offset}) {
     var resultQuery = new Limit();
     resultQuery.internalOptions = this.options;
     if (offset != null) {

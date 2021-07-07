@@ -10,7 +10,7 @@ import 'result_set.dart';
 
 class Query {
   final queryId = Uuid().v1();
-  bool _stored = false;
+  bool? _stored = false;
   Map<String, dynamic> internalOptions = {};
   Parameters get parameters => throw UnimplementedError();
   Map<ListenerToken, StreamSubscription> tokens = {};
@@ -27,18 +27,18 @@ class Query {
   /// Executes the query.
   ///
   /// Returns the ResultSet object representing the query result.
-  Future<ResultSet> execute() async {
+  Future<ResultSet?> execute() async {
     this.internalOptions["queryId"] = queryId;
 
-    if (!_stored && tokens.isNotEmpty) {
+    if (!_stored! && tokens.isNotEmpty) {
       _stored = await _channel.invokeMethod('storeQuery', this);
     }
 
     try {
       final List<dynamic> resultSet =
-          await _channel.invokeMethod('executeQuery', this);
+          await (_channel.invokeMethod('executeQuery', this) as FutureOr<List<dynamic>>);
 
-      List<Result> results = List<Result>();
+      List<Result> results = [];
       for (dynamic result in resultSet) {
         Result newResult = Result();
         newResult.setMap(result["map"]);
@@ -62,18 +62,18 @@ class Query {
   /// Adds a query change listener and posts changes to [callback].
   ///
   /// Returns the listener token object for removing the listener.
-  Future<ListenerToken> addChangeListener(
+  Future<ListenerToken?> addChangeListener(
       Function(QueryChange) callback) async {
     var token = ListenerToken();
     tokens[token] =
         _stream.where((data) => data["query"] == queryId).listen((data) {
       Map<String, dynamic> qcJson = data;
-      final List<dynamic> resultList = qcJson["results"];
+      final List<dynamic>? resultList = qcJson["results"];
 
-      ResultSet result;
+      ResultSet? result;
 
       if (resultList != null) {
-        List<Result> results = List<Result>();
+        List<Result> results = [];
         for (dynamic result in resultList) {
           Result newResult = Result();
           newResult.setMap(result["map"]);
@@ -83,7 +83,7 @@ class Query {
         result = ResultSet(results);
       }
 
-      String error = qcJson["error"];
+      String? error = qcJson["error"];
 
       callback(QueryChange(query: this, results: result, error: error));
     });
@@ -108,9 +108,9 @@ class Query {
       await subscription.cancel();
     }
 
-    if (_stored && tokens.isEmpty) {
+    if (_stored! && tokens.isEmpty) {
       // We had to store this before listening to so if stored on the platform
-      _stored = !await _channel.invokeMethod('removeQuery', this);
+      _stored = !await (_channel.invokeMethod('removeQuery', this) as FutureOr<bool>);
     }
   }
 
@@ -118,9 +118,9 @@ class Query {
 }
 
 class QueryChange {
-  QueryChange({this.query, this.results, this.error}) : assert(query != null);
+  QueryChange({required this.query, this.results, this.error}) : assert(query != null);
 
   final Query query;
-  final ResultSet results;
-  final String error;
+  final ResultSet? results;
+  final String? error;
 }

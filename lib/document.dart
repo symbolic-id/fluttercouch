@@ -2,7 +2,7 @@ import 'mutable_document.dart';
 
 /// Couchbase Lite document. The Document is immutable.
 class Document {
-  Document([Map<dynamic, dynamic> data, String id]) {
+  Document([Map<dynamic, dynamic>? data, String? id]) {
     if (data != null) {
       internalState = _stringMapFromDynamic(data);
     } else {
@@ -12,11 +12,11 @@ class Document {
     _id = id;
   }
 
-  Map<dynamic, dynamic> internalState;
-  String _id;
+  Map<dynamic, dynamic>? internalState;
+  String? _id;
 
   /// The document's ID.
-  String get id => _id;
+  String? get id => _id;
 
   Map<String, dynamic> _stringMapFromDynamic(Map<dynamic, dynamic> _map) {
     return Map.castFrom<dynamic, dynamic, String, dynamic>(_map);
@@ -30,8 +30,8 @@ class Document {
   /// - Returns: True of the property exists, otherwise false.
   bool contains(String key) {
     if (internalState != null &&
-        internalState.isNotEmpty &&
-        internalState.containsKey(key)) {
+        internalState!.isNotEmpty &&
+        internalState!.containsKey(key)) {
       return true;
     } else {
       return false;
@@ -40,7 +40,7 @@ class Document {
 
   /// The number of properties in the document.
   int count() {
-    return internalState.length;
+    return internalState!.length;
   }
 
   /// Gets a property's value as a boolean value.
@@ -49,7 +49,7 @@ class Document {
   /// - Parameter key: The key.
   /// - Returns: The Bool value.
   bool getBoolean(String key) {
-    Object _result = getValue(key);
+    Object? _result = getValue(key);
 
     if (_result is num) {
       return _result != 0;
@@ -65,7 +65,7 @@ class Document {
   /// - Parameter key: The key.
   /// - Returns: The Double value.
   double getDouble(String key) {
-    Object _result = getValue(key);
+    Object? _result = getValue(key);
     if (_result is double) {
       return _result;
     } else if (_result is int) {
@@ -82,7 +82,7 @@ class Document {
   /// - Parameter key: The key.
   /// - Returns: The Int value.
   int getInt(String key) {
-    Object _result = getValue(key);
+    Object? _result = getValue(key);
     if (_result is double) {
       return _result.toInt();
     } else if (_result is int) {
@@ -95,9 +95,9 @@ class Document {
   /// An array containing all keys, or an empty array if the document has no properties.
   List<String> getKeys() {
     if (internalState != null) {
-      return internalState.keys.toList();
+      return internalState!.keys.toList() as List<String>;
     } else {
-      return List<String>();
+      return [];
     }
   }
 
@@ -106,8 +106,8 @@ class Document {
   ///
   /// - Parameter key: The key.
   /// - Returns: The String object or null.
-  String getString(String key) {
-    Object _result = getValue(key);
+  String? getString(String key) {
+    Object? _result = getValue(key);
     return _result is String ? _result : null;
   }
 
@@ -117,9 +117,9 @@ class Document {
   ///
   /// - Parameter key: The key.
   /// - Returns: The value or null.
-  Object getValue(String key) {
+  Object? getValue(String key) {
     if (contains(key)) {
-      return internalState[key] as Object;
+      return internalState![key] as Object?;
     } else {
       return null;
     }
@@ -130,7 +130,7 @@ class Document {
   ///
   /// - Parameter key: The key.
   /// - Returns: The List Object object or null.
-  List<T> getList<T>(String key) {
+  List<T>? getList<T>(String key) {
     var _result = getValue(key);
     if (_result is List) {
       return List.from(List.castFrom<dynamic, T>(_result));
@@ -144,7 +144,7 @@ class Document {
   ///
   /// - Parameter key: The key.
   /// - Returns: The List Object object or null.
-  List<T> getArray<T>(String key) => getList(key);
+  List<T>? getArray<T>(String key) => getList(key);
 
   /// Get a property's value as a Map Object, which is a mapping object of
   /// a dictionary value.
@@ -152,7 +152,7 @@ class Document {
   ///
   /// - Parameter key: The key.
   /// - Returns: The Map Object object or nil.
-  Map<K, V> getMap<K, V>(String key) {
+  Map<K, V>? getMap<K, V>(String key) {
     var _result = getValue(key);
     if (_result is Map) {
       return Map.from(Map.castFrom<dynamic, dynamic, K, V>(_result));
@@ -165,7 +165,7 @@ class Document {
   ///
   /// - Returns: The Dictionary representing the content of the current object.
   Map<String, dynamic> toMap() {
-    return Map.from(internalState);
+    return Map.from(internalState!);
   }
 
   /// Returns a mutable copy of the document.
