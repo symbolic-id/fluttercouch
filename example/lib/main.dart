@@ -1,71 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttercouch/document.dart';
-import 'package:fluttercouch/fluttercouch.dart';
-import 'package:fluttercouch/mutable_document.dart';
-import 'package:fluttercouch/query/query.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:fluttercouch_example/app_model.dart';
 
-class AppModel extends Model with Fluttercouch {
-  String _databaseName;
-  Document docExample;
-  Query query;
-
-  AppModel() {
-    initPlatformState();
-  }
-
-  initPlatformState() async {
-    try {
-      _databaseName = await initDatabaseWithName("infodiocesi");
-      setReplicatorEndpoint("ws://localhost:4984/infodiocesi");
-      setReplicatorType("PUSH_AND_PULL");
-      setReplicatorBasicAuthentication(<String, String>{
-        "username": "defaultUser",
-        "password": "defaultPassword"
-      });
-      setReplicatorContinuous(true);
-      initReplicator();
-      startReplicator();
-      docExample = await getDocumentWithId("diocesi_tab");
-      notifyListeners();
-      MutableDocument mutableDoc = MutableDocument();
-      mutableDoc.setString("prova", "");
-    } on PlatformException {}
-  }
-}
-
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
         title: 'Fluttercouch example application',
-        home: new ScopedModel<AppModel>(
-          model: new AppModel(),
-          child: new Home(),
+        home: ScopedModel<AppModel>(
+          model: AppModel(),
+          child: Home(),
         ));
   }
 }
 
 class Home extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Fluttercouch example application'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Fluttercouch example application'),
       ),
-      body: new Center(
-        child: new Column(
-          children: <Widget>[
-            new Text("This is an example app"),
-            new ScopedModelDescendant<AppModel>(
-              builder: (context, child, model) => new Text(
-                'Ciao',
-                style: Theme.of(context).textTheme.display1,
+      body: Center(
+        child: ScopedModelDescendant<AppModel>(
+          builder: (context, child, model) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("This is an example app"),
+              Expanded(
+                child: ScopedModelDescendant<AppModel>(
+                  builder: (context, child, model) => Text(
+                    // '${model.docExample.getKeys()}',
+                    '${model.docExample?.getValue('content') ?? "Loading.."}',
+                    style: Theme.of(context).textTheme.display1,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      model?.addContent("This card created from Android");
+                    },
+                    child: Icon(Icons.add),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
       ),
     );
   }
