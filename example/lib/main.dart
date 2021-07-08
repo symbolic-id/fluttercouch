@@ -39,11 +39,21 @@ class Home extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      model?.addContent("This card created from Android");
-                    },
-                    child: Icon(Icons.add),
+                  child: Row(
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          model?.getCards();
+                        },
+                        child: Icon(Icons.fitness_center),
+                      ),
+                      FloatingActionButton(
+                        onPressed: () {
+                          model?.addContent("This card created from Android");
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                    ],
                   ),
                 ),
               )

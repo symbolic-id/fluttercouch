@@ -46,4 +46,29 @@ class AppModel extends Model with Fluttercouch {
       saveDocument(doc);
     }
   }
+
+
+  Future<List<dynamic>> getCards() async {
+    Query query = QueryBuilder.select([SelectResult.all()])
+        .from('kalpataru_dev')
+        .where(Meta.id.regex(Expression.string('^card')));
+    // Query query = QueryBuilder.select([SelectResult.all()])
+    //     .from("bucket")
+    //     .where(Meta.id.equalTo(Expression.string("users")));
+
+    // List<Card> cards = [];
+
+    print('LL:: resultSet execute() ===========');
+    final resultSet = await query.execute();
+    print('LL:: resultSet resultSet : $resultSet');
+    resultSet?.allResults().forEach((element) {
+      element
+          .toList()
+          .forEach((element) => {
+        print('LL:: resultSet element: ${element['title']}')
+      });
+    });
+
+    return [];
+  }
 }

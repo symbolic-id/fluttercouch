@@ -36,7 +36,7 @@ class Query {
 
     try {
       final List<dynamic> resultSet =
-          await (_channel.invokeMethod('executeQuery', this) as FutureOr<List<dynamic>>);
+          await (_channel.invokeMethod('executeQuery', this));
 
       List<Result> results = [];
       for (dynamic result in resultSet) {
